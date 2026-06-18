@@ -17,7 +17,7 @@
   <meta property="og:description" content="Se hva det koster å ta lappen i Molde. Regn ut din egen totalpris med priskalkulatoren — du betaler kun for timene du trenger.">
   <meta property="og:url" content="https://www.thortrafikk.no/priser.html">
   <meta property="og:image" content="https://www.thortrafikk.no/img/og.jpg">
-  <link rel="stylesheet" href="css/styles.css?v=8">
+  <link rel="stylesheet" href="css/styles.css?v=9">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hjem","item":"https://www.thortrafikk.no/"},{"@type":"ListItem","position":2,"name":"Priser","item":"https://www.thortrafikk.no/priser.html"}]}</script>
 </head>
 <body>
@@ -83,96 +83,75 @@
         </div>
         <div class="bezel reveal">
           <div class="bezel__inner">
-            <div class="estimator" data-estimator>
-              <div class="est__controls">
-                <div class="est__field">
-                  <span class="est__label"><span class="est__step">1</span> Velg gir</span>
-                  <div class="seg" role="group" aria-label="Velg gir">
-                    <button type="button" data-gear="manuell" aria-pressed="true">Manuell</button>
-                    <button type="button" data-gear="automat" aria-pressed="false">Automat (kode 78)</button>
+            <div class="calc" data-calc>
+              <div class="calc__main">
+                <div class="calc__top">
+                  <span class="calc__steplabel">Steg <b data-cnum>1</b> av 5</span>
+                  <div class="calc__bar" aria-hidden="true"><i data-cbar style="width:20%"></i></div>
+                </div>
+
+                <div class="calc__step" data-cstep="1">
+                  <h3 class="calc__q">Hvilket gir vil du kjøre?</h3>
+                  <div class="calc__choices" role="group" aria-label="Velg gir">
+                    <button type="button" class="calc__choice is-on" data-gear="manuell" aria-pressed="true"><b>Manuell</b><span>Personbil med gir. Du kan kjøre alle biltyper.</span></button>
+                    <button type="button" class="calc__choice" data-gear="automat" aria-pressed="false"><b>Automat</b><span>Kode 78. Slipp clutch og gir.</span></button>
                   </div>
                 </div>
-                <div class="est__field">
-                  <span class="est__label"><span class="est__step">2</span> Obligatorisk grunnpakke</span>
-                  <p class="form__note" style="margin:-.3rem 0 .2rem">Alt dette er obligatorisk for alle. Har du allerede tatt en del et annet sted, huker du den bare av.</p>
-                  <div class="est-pack">
-                    <ul class="est-pack__list">
-                      <li><label><input type="checkbox" id="est-trafikalt" checked> <span class="est-pack__name"><b>Trafikalt grunnkurs + mørkekjøring</b><small>Huk av om du har det fra før</small></span></label><span class="est-pack__p">3&nbsp;740 kr</span></li>
-                      <li><label><input type="checkbox" id="est-trinn" checked> <span class="est-pack__name"><b>Trinnvurdering trinn 2 og 3</b></span></label><span class="est-pack__p">2&nbsp;380 kr</span></li>
-                      <li><label><input type="checkbox" id="est-bane" checked> <span class="est-pack__name"><b>Sikkerhetskurs på bane</b><small>inkl. baneleie</small></span></label><span class="est-pack__p">5&nbsp;895 kr</span></li>
-                      <li><label><input type="checkbox" id="est-veg" checked> <span class="est-pack__name"><b>Sikkerhetskurs på veg</b></span></label><span class="est-pack__p">10&nbsp;330 kr</span></li>
-                    </ul>
-                    <div class="est-pack__foot"><span>Sum obligatorisk grunnpakke</span><b id="est-pack-price">22&nbsp;345 kr</b></div>
+
+                <div class="calc__step" data-cstep="2" hidden>
+                  <h3 class="calc__q">Obligatorisk grunnpakke</h3>
+                  <p class="calc__note">Dette må alle ha. Har du tatt noe fra før, huker du det bare av.</p>
+                  <ul class="est-pack__list" style="margin-top:1rem">
+                    <li><label><input type="checkbox" id="c-trafikalt" checked> <span class="est-pack__name"><b>Trafikalt grunnkurs + mørkekjøring</b></span></label><span class="est-pack__p">3&nbsp;740 kr</span></li>
+                    <li><label><input type="checkbox" id="c-trinn" checked> <span class="est-pack__name"><b>Trinnvurdering trinn 2 og 3</b></span></label><span class="est-pack__p">2&nbsp;380 kr</span></li>
+                    <li><label><input type="checkbox" id="c-bane" checked> <span class="est-pack__name"><b>Sikkerhetskurs på bane</b><small>inkl. baneleie</small></span></label><span class="est-pack__p">5&nbsp;895 kr</span></li>
+                    <li><label><input type="checkbox" id="c-veg" checked> <span class="est-pack__name"><b>Sikkerhetskurs på veg</b></span></label><span class="est-pack__p">10&nbsp;330 kr</span></li>
+                  </ul>
+                </div>
+
+                <div class="calc__step" data-cstep="3" hidden>
+                  <h3 class="calc__q">Hvor mange kjøretimer?</h3>
+                  <div class="stepper" style="margin-top:.5rem">
+                    <button type="button" class="stepper__btn" id="c-minus" aria-label="Færre kjøretimer">−</button>
+                    <div class="stepper__val"><span id="c-timer-val">10</span><small>timer · 875 kr/stk</small></div>
+                    <button type="button" class="stepper__btn" id="c-plus" aria-label="Flere kjøretimer">+</button>
+                  </div>
+                  <p class="calc__note">De fleste bruker 10–25 timer, avhengig av hvor mye de øvelseskjører privat.</p>
+                </div>
+
+                <div class="calc__step" data-cstep="4" hidden>
+                  <h3 class="calc__q">Tilvalg</h3>
+                  <label class="calc__check"><input type="checkbox" id="c-leiebil" checked><span><b>Leiebil til oppkjøring</b><small>Valgfritt. De fleste leier bil av oss. (2&nbsp;990 kr)</small></span></label>
+                  <label class="calc__check"><input type="checkbox" id="c-forerprove" checked><span><b>Førerprøve hos Statens vegvesen</b><small>Den praktiske oppkjøringen. (1&nbsp;540 kr)</small></span></label>
+                </div>
+
+                <div class="calc__step calc__step--sum" data-cstep="5" hidden>
+                  <h3 class="calc__q">Din totalpris</h3>
+                  <div class="calc__sumtotal" data-ctotal2>0 kr</div>
+                  <p class="calc__note">Estimert pris for dine valg. Endelig sum avhenger av antall kjøretimer. Se hele prislisten under.</p>
+                  <div class="btn-row" style="margin-top:1.3rem">
+                    <a class="btn btn--primary" href="kontakt.html">Meld deg på<span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+                    <button type="button" class="btn btn--ghost" data-creset>Start på nytt</button>
                   </div>
                 </div>
-                <div class="est__field">
-                  <span class="est__label"><span class="est__step">3</span> Antall kjøretimer</span>
-                  <div class="stepper">
-                    <button type="button" class="stepper__btn" id="est-minus" aria-label="Færre kjøretimer">−</button>
-                    <div class="stepper__val"><span id="est-timer-val">10</span><small>timer · 875 kr/stk</small></div>
-                    <button type="button" class="stepper__btn" id="est-plus" aria-label="Flere kjøretimer">+</button>
-                  </div>
-                  <p class="form__note">Veiledende — mange bruker 10–25 timer, avhengig av hvor mye de øvelseskjører privat.</p>
-                </div>
-                <div class="est__field">
-                  <span class="est__label"><span class="est__step">4</span> Tilvalg</span>
-                  <div class="est__check"><input type="checkbox" id="est-leiebil" checked><label for="est-leiebil"><b>Leiebil til oppkjøring</b> — valgfritt; de fleste leier bil av oss <em>(2&nbsp;990 kr)</em>.</label></div>
-                </div>
-                <div class="est__field">
-                  <span class="est__label"><span class="est__step">5</span> Førerprøve</span>
-                  <div class="est__check"><input type="checkbox" id="est-forerprove" checked><label for="est-forerprove"><b>Førerprøve hos Statens vegvesen</b> — den praktiske oppkjøringen <em>(1&nbsp;540 kr)</em>.</label></div>
+
+                <div class="calc__nav">
+                  <button type="button" class="btn btn--ghost" data-cback hidden>Tilbake</button>
+                  <button type="button" class="btn btn--primary" data-cnext>Neste<span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
                 </div>
               </div>
-              <div class="est__result">
-                <span class="est__cap">Estimert totalpris</span>
-                <span class="est__total" id="est-total">0 kr</span>
-                <ul class="est__break" id="est-break"></ul>
-                <p class="est__disc">Grunnpakken er kursene alle må ha. Kjøretimer og leiebil legger du til etter behov. Alle priser er hentet fra Thor Trafikks prisliste — endelig sum avhenger av antall kjøretimer.</p>
-              </div>
+
+              <aside class="calc__aside" aria-live="polite">
+                <span class="calc__asidecap">Din pris så langt</span>
+                <span class="calc__asidetotal" data-ctotal>0 kr</span>
+                <ul class="calc__break" data-cbreak></ul>
+              </aside>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SLIK SETTES PRISEN SAMMEN -->
-    <section class="section section--soft">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2>Fast del + kjøretimene du faktisk trenger</h2>
-          <p class="lead">Alle elever har samme obligatoriske del. Det eneste som varierer er hvor mange kjøretimer du trenger — og du betaler kun for dem du faktisk bruker. Ingen faste timepakker du risikerer å betale for mye for.</p>
-        </div>
-        <div class="grid grid-2">
-          <article class="pkg card reveal">
-            <span class="pkg__name">Fast del</span>
-            <p class="pkg__desc">De obligatoriske kursene alle må ha — likt for alle elever.</p>
-            <div class="pkg__price">22 345 kr<small> / samlet</small></div>
-            <ul class="pkg__list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Trafikalt grunnkurs + mørkekjøring</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Trinnvurdering trinn 2 og 3</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sikkerhetskurs på bane (inkl. baneleie)</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sikkerhetskurs på veg</li>
-            </ul>
-            <p class="price-note">+ leiebil til oppkjøring (valgfritt, 2 990 kr) og førerprøve til Statens vegvesen (1 540 kr). Likt for manuell og automat.</p>
-          </article>
-          <article class="pkg card reveal" data-delay="1">
-            <span class="pkg__name">Kjøretimer</span>
-            <p class="pkg__desc">Du betaler kun for timene du faktisk trenger — ikke én time mer.</p>
-            <div class="pkg__price">875 kr<small> / time (45 min)</small></div>
-            <ul class="pkg__list">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Kjøretime à 45 min — 875 kr</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Forbikjøringstime (90 min) — 1 750 kr</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Antall etter behov og fremgang</li>
-            </ul>
-            <p class="price-note">De fleste trenger 10–25 kjøretimer. Vi vurderer underveis, så du kjører opp når du er klar.</p>
-          </article>
-        </div>
-        <div class="bezel reveal" style="margin-top:1.6rem"><div class="bezel__inner" style="display:flex;flex-wrap:wrap;gap:1rem 1.6rem;align-items:center;justify-content:space-between">
-          <div><h3 style="margin-bottom:.3rem">Vil du se din egen total?</h3><p style="margin:0;max-width:48ch">Legg inn antall kjøretimer i kalkulatoren, så regner den ut fast del + dine timer + førerprøve automatisk.</p></div>
-          <a class="btn btn--primary" href="#kalkulator">Åpne priskalkulatoren<span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
-        </div></div>
-      </div>
-    </section>
 
     <!-- ENKELTPRISER -->
     <section class="section">
@@ -217,6 +196,6 @@
   </footer>
 
   <div class="mbar"><a class="btn btn--ghost" href="#kalkulator">Kalkulator</a><a class="btn btn--primary" href="kontakt.html">Meld deg på<span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a></div>
-  <script src="js/main.js?v=5" defer></script>
+  <script src="js/main.js?v=9" defer></script>
 </body>
 </html>

@@ -136,71 +136,55 @@
   }
 
   /* ---------- Pris-estimator ---------- */
-  var est = document.querySelector('[data-estimator]');
-  if (est) {
-    /* Priser fra Thor Trafikks prisliste (thortrafikk.no/prisliste). Oppdater ved prisendring. */
-    var P = {
-      trafikalt: 3740,     // Trafikalt grunnkurs (1750) + mørkekjøring (1990)
-      time: 875,           // Kjøretime à 45 min (automat/manuell)
-      trinn: 2380,         // Trinnvurdering trinn 2 (1190) + trinn 3 (1190)
-      bane: 5895,          // Sikkerhetskurs på bane (4395) + NAF baneleie (1500)
-      veg: 10330,          // Sikkerhetskurs på veg (1290 + 4375 + 3375 + 1290)
-      leiebil: 2990,       // Leiebil til oppkjøring (inkl. 30 min oppvarming)
-      forerprove: 1540     // Førerprøve (praktisk oppkjøring) hos Statens vegvesen, klasse B (på trafikkstasjon)
+  var calc = document.querySelector('[data-calc]');
+  if (calc) {
+    var P = { trafikalt: 3740, time: 875, trinn: 2380, bane: 5895, veg: 10330, leiebil: 2990, forerprove: 1540 };
+    var S = { step: 1, gear: 'manuell', timer: 10, leiebil: true, forerprove: true, obl: { trafikalt: true, trinn: true, bane: true, veg: true } };
+    var MAX = 5, MINT = 0, MAXT = 40;
+    var OBL = [['trafikalt', P.trafikalt, 'Trafikalt grunnkurs + mørkekjøring'], ['trinn', P.trinn, 'Trinnvurdering trinn 2 og 3'], ['bane', P.bane, 'Sikkerhetskurs på bane (inkl. baneleie)'], ['veg', P.veg, 'Sikkerhetskurs på veg']];
+    var q = function (s) { return calc.querySelector(s); };
+    var steps = calc.querySelectorAll('[data-cstep]');
+    var cnum = q('[data-cnum]'), cbar = q('[data-cbar]'), cback = q('[data-cback]'), cnext = q('[data-cnext]');
+    var ctotal = q('[data-ctotal]'), ctotal2 = q('[data-ctotal2]'), cbreak = q('[data-cbreak]'), timerVal = q('#c-timer-val');
+    var bline = function (label, val) { return '<li><span>' + label + '</span><b>' + kr(val) + '</b></li>'; };
+    var compute = function () {
+      var grunn = 0; OBL.forEach(function (o) { if (S.obl[o[0]]) grunn += o[1]; });
+      var timerSum = S.timer * P.time, leie = S.leiebil ? P.leiebil : 0, fp = S.forerprove ? P.forerprove : 0;
+      return { grunn: grunn, timerSum: timerSum, leie: leie, fp: fp, total: grunn + timerSum + leie + fp };
     };
-    var gearBtns = est.querySelectorAll('[data-gear]');
-    var timerVal = est.querySelector('#est-timer-val');
-    var packPrice = est.querySelector('#est-pack-price');
-    var cLeie = est.querySelector('#est-leiebil');
-    var cFp = est.querySelector('#est-forerprove');
-    var out = est.querySelector('#est-total');
-    var brk = est.querySelector('#est-break');
-    var minus = est.querySelector('#est-minus');
-    var plus = est.querySelector('#est-plus');
-    var gear = 'manuell', timer = 10, MIN = 0, MAX = 40;
-
-    // Obligatoriske deler — hver kan hukes av/på i tilfelle eleven har tatt noe fra før
-    var obl = [
-      { el: est.querySelector('#est-trafikalt'), price: P.trafikalt, label: 'Trafikalt grunnkurs + mørkekjøring' },
-      { el: est.querySelector('#est-trinn'),     price: P.trinn,     label: 'Trinnvurdering trinn 2 og 3' },
-      { el: est.querySelector('#est-bane'),      price: P.bane,      label: 'Sikkerhetskurs på bane (inkl. baneleie)' },
-      { el: est.querySelector('#est-veg'),       price: P.veg,       label: 'Sikkerhetskurs på veg' }
-    ].filter(function (o) { return o.el; });
-
-    var line = function (label, val) { return '<li><span>' + label + '</span><span class="est__amt">' + kr(val) + '</span></li>'; };
-
-    var recalc = function () {
-      var grunn = 0, sub = '';
-      obl.forEach(function (o) { if (o.el.checked) { grunn += o.price; sub += '<li>' + o.label + '</li>'; } });
-      var timerSum = timer * P.time;
-      var leie = cLeie && cLeie.checked ? P.leiebil : 0;
-      var fp = cFp && cFp.checked ? P.forerprove : 0;
-      var total = grunn + timerSum + leie + fp;
-      var lines = '';
-      if (grunn > 0) lines += '<li class="est__group"><div class="est__grouptop"><span>Obligatorisk grunnpakke</span><span class="est__amt">' + kr(grunn) + '</span></div><ul class="est__sub">' + sub + '</ul></li>';
-      lines += line(timer + ' kjøretimer (à 45 min)', timerSum);
-      if (leie) lines += line('Leiebil til oppkjøring', leie);
-      if (fp) lines += line('Førerprøve (Statens vegvesen)', fp);
-      if (timerVal) timerVal.textContent = timer;
-      if (packPrice) packPrice.textContent = kr(grunn);
-      if (out) out.textContent = kr(total);
-      if (brk) brk.innerHTML = lines;
+    var render = function () {
+      var t = compute();
+      if (ctotal) ctotal.textContent = kr(t.total);
+      if (ctotal2) ctotal2.textContent = kr(t.total);
+      if (timerVal) timerVal.textContent = S.timer;
+      if (cbreak) { var l = ''; if (t.grunn > 0) l += bline('Obligatorisk grunnpakke', t.grunn); l += bline(S.timer + ' kjøretimer', t.timerSum); if (t.leie) l += bline('Leiebil', t.leie); if (t.fp) l += bline('Førerprøve', t.fp); cbreak.innerHTML = l; }
     };
-
-    gearBtns.forEach(function (b) {
+    var show = function (n) {
+      S.step = n;
+      steps.forEach(function (s) { s.hidden = (+s.getAttribute('data-cstep') !== n); });
+      if (cnum) cnum.textContent = n;
+      if (cbar) cbar.style.width = (n / MAX * 100) + '%';
+      if (cback) cback.hidden = n === 1;
+      if (cnext) cnext.hidden = n === MAX;
+      render();
+    };
+    if (cnext) cnext.addEventListener('click', function () { if (S.step < MAX) show(S.step + 1); });
+    if (cback) cback.addEventListener('click', function () { if (S.step > 1) show(S.step - 1); });
+    var creset = q('[data-creset]'); if (creset) creset.addEventListener('click', function () { show(1); });
+    calc.querySelectorAll('[data-gear]').forEach(function (b) {
       b.addEventListener('click', function () {
-        gear = b.getAttribute('data-gear');
-        gearBtns.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
-        timer = gear === 'automat' ? 8 : 10; // automat krever i snitt litt færre timer
-        recalc();
+        S.gear = b.getAttribute('data-gear');
+        calc.querySelectorAll('[data-gear]').forEach(function (o) { var on = o === b; o.classList.toggle('is-on', on); o.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        S.timer = S.gear === 'automat' ? 8 : 10; render();
       });
     });
-    if (minus) minus.addEventListener('click', function () { timer = Math.max(MIN, timer - 1); recalc(); });
-    if (plus) plus.addEventListener('click', function () { timer = Math.min(MAX, timer + 1); recalc(); });
-    obl.forEach(function (o) { o.el.addEventListener('change', recalc); });
-    if (cLeie) cLeie.addEventListener('change', recalc);
-    if (cFp) cFp.addEventListener('change', recalc);
-    recalc();
+    OBL.forEach(function (o) { var el = q('#c-' + o[0]); if (el) el.addEventListener('change', function () { S.obl[o[0]] = el.checked; render(); }); });
+    var mn = q('#c-minus'), pl = q('#c-plus');
+    if (mn) mn.addEventListener('click', function () { S.timer = Math.max(MINT, S.timer - 1); render(); });
+    if (pl) pl.addEventListener('click', function () { S.timer = Math.min(MAXT, S.timer + 1); render(); });
+    var cl = q('#c-leiebil'); if (cl) cl.addEventListener('change', function () { S.leiebil = cl.checked; render(); });
+    var cf = q('#c-forerprove'); if (cf) cf.addEventListener('change', function () { S.forerprove = cf.checked; render(); });
+    show(1);
   }
 
   /* ---------- Teoriquiz ---------- */
