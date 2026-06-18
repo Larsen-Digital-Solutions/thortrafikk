@@ -154,10 +154,23 @@
     };
     var render = function () {
       var t = compute();
-      if (ctotal) ctotal.textContent = kr(t.total);
+      // "Din pris så langt": tar bare med det du har valgt fram til nåværende steg
+      var grunn = S.step >= 2 ? t.grunn : 0;
+      var timerSum = S.step >= 3 ? t.timerSum : 0;
+      var leie = S.step >= 4 ? t.leie : 0;
+      var fp = S.step >= 4 ? t.fp : 0;
+      var sofar = grunn + timerSum + leie + fp;
+      if (ctotal) ctotal.textContent = kr(sofar);
       if (ctotal2) ctotal2.textContent = kr(t.total);
       if (timerVal) timerVal.textContent = S.timer;
-      if (cbreak) { var l = ''; if (t.grunn > 0) l += bline('Obligatorisk grunnpakke', t.grunn); l += bline(S.timer + ' kjøretimer', t.timerSum); if (t.leie) l += bline('Leiebil', t.leie); if (t.fp) l += bline('Førerprøve', t.fp); cbreak.innerHTML = l; }
+      if (cbreak) {
+        var l = '';
+        if (grunn > 0) l += bline('Obligatorisk grunnpakke', grunn);
+        if (S.step >= 3 && timerSum > 0) l += bline(S.timer + ' kjøretimer', timerSum);
+        if (leie) l += bline('Leiebil', leie);
+        if (fp) l += bline('Førerprøve', fp);
+        cbreak.innerHTML = l;
+      }
     };
     var show = function (n) {
       S.step = n;
