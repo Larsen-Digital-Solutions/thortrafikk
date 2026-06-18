@@ -682,11 +682,11 @@ html.js .reveal.in { opacity: 1; transform: none; }
 
 /* ---------- Følg oss ---------- */
 .follow { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-.follow__btn { display: inline-flex; align-items: center; gap: .85rem; padding: .85rem 1.5rem; background: #fff; border: 1px solid var(--hairline); border-radius: var(--r-pill); transition: border-color .25s var(--ease), transform .3s var(--ease-spring), box-shadow .3s var(--ease); }
-.follow__btn svg { width: 22px; height: 22px; color: var(--brand); flex: none; }
+.follow__btn { display: inline-flex; align-items: center; gap: .65rem; padding: .6rem 1.1rem; background: #fff; border: 1px solid var(--hairline); border-radius: var(--r-pill); transition: border-color .25s var(--ease), transform .3s var(--ease-spring), box-shadow .3s var(--ease); }
+.follow__btn svg { width: 19px; height: 19px; color: var(--brand); flex: none; }
 .follow__btn span { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
-.follow__btn b { font-weight: 600; font-size: .98rem; color: var(--ink); }
-.follow__btn small { font-size: .84rem; color: var(--muted); }
+.follow__btn b { font-weight: 600; font-size: .9rem; color: var(--ink); }
+.follow__btn small { font-size: .78rem; color: var(--muted); }
 .follow__btn:hover { border-color: var(--brand); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
 /* ---------- Redusert bevegelse ---------- */
