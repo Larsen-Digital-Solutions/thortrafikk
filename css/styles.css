@@ -245,7 +245,7 @@ body.menu-open .brand__text { color: #fff; }
 .hero__scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(8,26,17,.92) 0%, rgba(8,26,17,.85) 36%, rgba(8,26,17,.56) 55%, rgba(8,26,17,.16) 75%, rgba(8,26,17,0) 92%), linear-gradient(180deg, rgba(8,26,17,.5) 0%, rgba(8,26,17,0) 30%, rgba(8,26,17,0) 58%, rgba(8,26,17,.34) 100%); }
 .hero__inner { padding-top: var(--nav-h); padding-bottom: 2.5rem; }
 .hero h1 { color: #fff; margin: 1.2rem 0 1.3rem; max-width: 24ch; font-size: clamp(2.6rem, 5.6vw, 4.4rem); line-height: 1.04; letter-spacing: -0.03em; text-shadow: 0 2px 34px rgba(0,0,0,.34); }
-.hero .lead { color: rgba(255,255,255,.93); max-width: 54ch; text-shadow: 0 1px 14px rgba(0,0,0,.35); }
+.hero .lead { color: rgba(255,255,255,.93); max-width: 34ch; text-shadow: 0 1px 14px rgba(0,0,0,.35); }
 .hero .eyebrow, .subhero .eyebrow { color: rgba(255,255,255,.96); font-size: .78rem; letter-spacing: .22em; text-shadow: 0 1px 14px rgba(0,0,0,.5); }
 .hero .eyebrow::before, .subhero .eyebrow::before { display: none; }
 .hero .btn-row { margin-top: 2rem; }
